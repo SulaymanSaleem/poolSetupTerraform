@@ -1,0 +1,35 @@
+#!/bin/bash
+curl -sL https://deb.nodesource.com/setup_10.x | sudo -E bash -
+sudo apt install -y nodejs
+
+sudo useradd --create-home apiuser
+sudo usermod --shell /bin/bash apiuser
+
+sudo chmod -R 777 /home/webrunner
+
+cd /home/apiuser
+
+git clone -b dev https://github.com/yamileon/poolmanager-api.git
+
+cd /home/apiuser/poolmanager-api
+npm install
+
+echo '[Unit]
+Description=api server
+[Service]
+User=apiuser
+WorkingDirectory=/home/apiuser/poolmanager-api
+ExecStart=/usr/bin/node index.js
+[Install]
+WantedBy=multi-user.target' | sudo tee /etc/systemd/system/poolmanagerapi.service
+
+echo "exports.app = {
+    PORT: 8080,
+    MONGODB_URI: 'mongodb://"$1":27017/qac',
+    logErrors: true
+};" > /home/webrunner/poolmanager-api/config.js
+
+
+sudo systemctl start poolmanagerapi
+
+sudo systemctl enable poolmanagerapi

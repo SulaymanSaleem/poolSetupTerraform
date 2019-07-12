@@ -1,6 +1,0 @@
-#!/bin/bash
-sudo apt-get install git
-git clone https://github.com/SulaymanSaleem/poolSetup
-cd /home/terraform/poolSetup
-sudo chmod ugo+rwx install.sh
-./install.sh

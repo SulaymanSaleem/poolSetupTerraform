@@ -1,0 +1,11 @@
+#!/bin/bash
+sudo apt update
+
+curl -sL https://deb.nodesource.com/setup_10.x | sudo -E bash -
+git clone -b mulvms https://github.com/SulaymanSaleem/poolSetupTerraform
+sudo cp /home/terraform/poolSetupTerraform/scripts/mongod.conf /etc/mongod.conf
+sudo apt install -y mongodb
+
+echo '//////////////////////////////////////////'
+echo '          mongo complete                  '
+echo '//////////////////////////////////////////'

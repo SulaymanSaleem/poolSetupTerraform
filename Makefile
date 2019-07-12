@@ -6,10 +6,11 @@ TERRAFORM_DESTROY = "terraform destroy -auto-approve -var-file="
 terraform-init:
 	@terraform init
 
-myinstall-apply:
-		@"${TERRAFORM_APPLY}${VAR_DIR}"/myinstall.tfvars
+mean-apply:
+		@"${TERRAFORM_APPLY}${VAR_DIR}"/mean_run.tfvars
 
-myinstall-destroy:
-		@"${TERRAFORM_DESTROY}${VAR_DIR}"/myinstall.tfvars
+mean-destroy:
+		@"${TERRAFORM_DESTROY}${VAR_DIR}"/mean_run.tfvars
 
-.PHONY = terraform-init  myinstall-apply myinstall-destroy
+
+.PHONY = terraform-init mean-apply mean-destroy

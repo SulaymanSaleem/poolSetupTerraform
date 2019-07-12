@@ -2,8 +2,11 @@ variable "project" {
 	default = "terraformserver"
 }
 
-variable "name" {
-	default = "sullysting"
+variable "name1" {
+	default = "mongo"
+}
+variable "name2" {
+	default = "api"
 }
 
 variable "machine_type" {
@@ -59,7 +62,10 @@ variable "install_packages" {
 	}
 }
 
-variable "scripts" {
+variable "scripts1" {
+	default = []
+}
+variable "scripts2" {
 	default = []
 }
 

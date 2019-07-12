@@ -1,8 +1,8 @@
-resource "google_compute_instance" "default" {
-	name = "${var.name}"
+resource "google_compute_instance" "mongo" {
+	name = "${var.name1}"
 	machine_type = "${var.machine_type}"
 	zone = "${var.zone}"
-	tags = ["${var.name}"]
+	tags = ["${var.name1}"]
 	boot_disk {
 		initialize_params {
 			image = "${var.image}"
@@ -16,11 +16,11 @@ resource "google_compute_instance" "default" {
 	}
 	metadata = {
     	sshKeys = "${var.ssh_user}:${file("${var.public_key}")}"
-  	}	
+  	}
 	connection {
 		type = "ssh"
 		user = "${var.ssh_user}"
-    host = "${google_compute_instance.default.network_interface.0.access_config.0.nat_ip}"
+    host = "${google_compute_instance.mongo.network_interface.0.access_config.0.nat_ip}"
 		private_key = "${file("${var.private_key}")}"
 	}
 	provisioner "remote-exec" {
@@ -30,6 +30,42 @@ resource "google_compute_instance" "default" {
 		]
 	}
 	provisioner "remote-exec" {
-		scripts = "${var.scripts}"
+		scripts = "${var.scripts1}"
+	}
+}
+
+resource "google_compute_instance" "api" {
+	name = "${var.name2}"
+	machine_type = "${var.machine_type}"
+	zone = "${var.zone}"
+	tags = ["${var.name2}"]
+	boot_disk {
+		initialize_params {
+			image = "${var.image}"
+		}
+	}
+	network_interface {
+		network = "${var.network}"
+		access_config {
+			// Ephemeral IP
+		}
+	}
+	metadata = {
+    	sshKeys = "${var.ssh_user}:${file("${var.public_key}")}"
+  	}
+	connection {
+		type = "ssh"
+		user = "${var.ssh_user}"
+    host = "${google_compute_instance.api.network_interface.0.access_config.0.nat_ip}"
+		private_key = "${file("${var.private_key}")}"
+	}
+	provisioner "remote-exec" {
+		inline = [
+			"${var.update_packages[var.package_manager]}",
+			"${var.install_packages[var.package_manager]} ${join(" ", var.packages)}"
+		]
+	}
+	provisioner "remote-exec" {
+		scripts = "${var.scripts2}"
 	}
 }
